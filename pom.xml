@@ -4,11 +4,9 @@
 
     <groupId>io.github.jmkeyes</groupId>
     <artifactId>httpclient-proxy-protocol</artifactId>
-    <version>${revision}</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <properties>
-        <revision>1.0.0-SNAPSHOT</revision>
-
         <java.version>1.8</java.version>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
