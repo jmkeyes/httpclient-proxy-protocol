@@ -6,6 +6,31 @@
     <artifactId>httpclient-proxy-protocol</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
+    <name>httpclient-proxy-protocol</name>
+    <description>A HttpClient ConnectionSocketFactory that injects a PROXY protocol header on every established connection.</description>
+    <url>https://github.com/jmkeyes/httpclient-proxy-protocol</url>
+
+    <licenses>
+      <license>
+        <name>MIT License</name>
+        <url>http://www.opensource.org/licenses/mit-license.php</url>
+      </license>
+    </licenses>
+
+    <developers>
+      <developer>
+        <name>Joshua M. Keyes</name>
+        <email>joshua.michael.keyes@gmail.com</email>
+        <url>https://github.com/jmkeyes</url>
+      </developer>
+    </developers>
+
+    <scm>
+      <connection>scm:git:git://github.com/jmkeyes/httpclient-proxy-protocol.git</connection>
+      <developerConnection>scm:git:ssh://github.com:jmkeyes/httpclient-proxy-protocol.git</developerConnection>
+      <url>http://github.com/jmkeyes/httpclient-proxy-protocol/tree/main</url>
+    </scm>
+
     <properties>
         <java.version>11</java.version>
 
@@ -15,6 +40,11 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
+
+        <maven.plugin.central-publishing.version>0.7.0</maven.plugin.central-publishing.version>
+        <maven.plugin.javadoc.version>3.11.2</maven.plugin.javadoc.version>
+        <maven.plugin.source.version>3.3.1</maven.plugin.source.version>
+        <maven.plugin.gpg.version>3.2.7</maven.plugin.gpg.version>
 
         <httpclient.version>4.5.13</httpclient.version>
         <junit.version>4.13.2</junit.version>
@@ -26,6 +56,7 @@
             <artifactId>httpclient</artifactId>
             <version>${httpclient.version}</version>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -33,4 +64,85 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+      <profile>
+        <id>github-packages</id>
+        <distributionManagement>
+          <repository>
+            <id>github-packages</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/jmkeyes/httpclient-proxy-protocol</url>
+          </repository>
+        </distributionManagement>
+      </profile>
+
+      <profile>
+        <id>maven-central</id>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <version>${maven.plugin.javadoc.version}</version>
+              <executions>
+                <execution>
+                  <id>attach-javadocs</id>
+                  <goals>
+                    <goal>jar</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-source-plugin</artifactId>
+              <version>${maven.plugin.source.version}</version>
+              <executions>
+                <execution>
+                  <id>attach-sources</id>
+                  <goals>
+                    <goal>jar-no-fork</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-gpg-plugin</artifactId>
+              <version>${maven.plugin.gpg.version}</version>
+              <configuration>
+                <gpgArguments>
+                  <arg>--pinentry-mode</arg>
+                  <arg>loopback</arg>
+                </gpgArguments>
+              </configuration>
+              <executions>
+                <execution>
+                  <id>sign-artifacts</id>
+                  <phase>verify</phase>
+                  <goals>
+                    <goal>sign</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+
+            <plugin>
+              <groupId>org.sonatype.central</groupId>
+              <artifactId>central-publishing-maven-plugin</artifactId>
+              <version>${maven.plugin.central-publishing.version}</version>
+              <extensions>true</extensions>
+              <configuration>
+                <publishingServerId>maven-central</publishingServerId>
+                <waitUntil>published</waitUntil>
+                <autoPublish>true</autoPublish>
+              </configuration>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
+    </profiles>
 </project>
